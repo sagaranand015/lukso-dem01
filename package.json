@@ -1,0 +1,18 @@
+{
+  "name": "demo01",
+  "version": "1.0.0",
+  "description": "Demo01 for trying out the lukso custom contract creation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
+    "hardhat": "^2.10.2"
+  },
+  "dependencies": {
+    "@lukso/lsp-smart-contracts": "^0.6.2"
+  }
+}
