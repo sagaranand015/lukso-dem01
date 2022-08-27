@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Demo01 for trying out the lukso custom contract creation",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,6 +14,8 @@
     "hardhat": "^2.10.2"
   },
   "dependencies": {
-    "@lukso/lsp-smart-contracts": "^0.6.2"
+    "@lukso/lsp-factory.js": "^2.3.3",
+    "@lukso/lsp-smart-contracts": "^0.6.2",
+    "web3": "^1.7.5"
   }
 }
