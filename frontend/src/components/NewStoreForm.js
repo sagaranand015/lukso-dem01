@@ -53,18 +53,16 @@ export default function NewStoreForm() {
     const state = GetGlobalState();
     if(!state.selectedAddress) {
       console.log("Wallet has not been connected. Please connect wallet first!");
-      // alert.error("Wallet has not been connected. Please connect wallet first!");
       alert("Wallet has not been connected. Please connect wallet first!");
       setIsSubmitting(false);
     }
     else {
-      const storeUP = await CreateStoreUniversalProfile(state.selectedAddress, data);
-      console.log("Store UP has been created: ", storeUP.LSP0ERC725Account.address);
-      alert("Store UP has been created: ", storeUP.LSP0ERC725Account.address);
+      // const storeUP = await CreateStoreUniversalProfile(state.selectedAddress, data);
+      // console.log("Store UP has been created: ", storeUP.LSP0ERC725Account.address);
+      // alert("Store UP has been created. Reloading the application");
+      // setIsSubmitting(false);
 
-      setIsSubmitting(false);
-
-      navigate('/dashboard/app', { replace: true });
+      // navigate('/dashboard/app', { replace: true });
     }
     
   };

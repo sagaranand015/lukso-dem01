@@ -16,7 +16,8 @@ import NavSection from '../../components/NavSection';
 //
 import navConfig from './NavConfig';
 
-import { GetGlobalState, UpdateSelectedAddress } from '../../globalState';
+import { GetConnectedWalletUPData } from '../../lukso/universal_profiles';
+import { GetGlobalState, UpdateSelectedProfileInState, UpdateSelectedAddressInState } from '../../globalState';
 
 // ----------------------------------------------------------------------
 
@@ -44,31 +45,6 @@ DashboardSidebar.propTypes = {
   onCloseSidebar: PropTypes.func,
 };
 
-// export async function ConnectWallet() {
-//   // This method is run when the user clicks the Connect. It connects the
-//   // dapp to the user's wallet, and initializes it.
-
-//   // To connect to the user's wallet, we have to run this method.
-//   // It returns a promise that will resolve to the user's address.
-//   const [selectedAddress] = await window.ethereum.request({ method: 'eth_requestAccounts' });
-//   console.log("Connected address is:", selectedAddress);
-
-//   state.selectedAddress = selectedAddress;
-//   setAddrSelected(state.selectedAddress);
-
-//   console.log("=== final state is: ", state);
-
-//   // this.setState({
-//   //   selectedAddress
-//   // }, () => {
-//   //   // initialize store contract and store token details
-//   //   // _initialiseStoreTokenDetails();
-//   //   // this._initialiseStoresubscriptionTokenDetails();
-//   //   // this._refreshAllTokenBalances();
-//   // });
-
-// }
-
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
 
   const state = GetGlobalState();
@@ -77,15 +53,18 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   async function ConnectWallet() {
     const [selectedAddress] = await window.ethereum.request({ method: 'eth_requestAccounts' });
     console.log("Connected address is:", selectedAddress);  
-    state.selectedAddress = selectedAddress;
+    UpdateSelectedAddressInState(selectedAddress)
     setAddrSelected(state.selectedAddress);
-    UpdateSelectedAddress(selectedAddress);
-  }
 
+    const connectedUPData = GetConnectedWalletUPData();
+    connectedUPData.then(res => {
+      console.log("Got the profile details from Lukso!: ", res);
+      UpdateSelectedProfileInState(res.value.LSP3Profile);
+    });
+  }
   const { pathname } = useLocation();
 
   const isDesktop = useResponsive('up', 'lg');
-
   useEffect(() => {
     if (isOpenSidebar) {
       onCloseSidebar();

@@ -1313,6 +1313,15 @@
   "resolved" "https://registry.npmjs.org/@emotion/weak-memoize/-/weak-memoize-0.3.0.tgz"
   "version" "0.3.0"
 
+"@erc725/erc725.js@^0.14.4":
+  "integrity" "sha512-cS93wPo7vbJ3PC5LwWFLodnM78WpWnsgqCgOUCx/LpR863TxULkbpn1sdJz3LobXtSaZBUf5p8fbpxLk2WWaMA=="
+  "resolved" "https://registry.npmjs.org/@erc725/erc725.js/-/erc725.js-0.14.4.tgz"
+  "version" "0.14.4"
+  dependencies:
+    "ethereumjs-util" "^7.1.4"
+    "web3-eth-abi" "^1.7.3"
+    "web3-utils" "^1.7.3"
+
 "@erc725/erc725.js@0.14.1":
   "integrity" "sha512-Ao0aJ5O3P0nYtG1vFZD394r19dt8muXyQ0YOvZgCqLMQ7FNoMQPx2mZnDC+ihXFmSm+SHESZoqsi9J6OK209uw=="
   "resolved" "https://registry.npmjs.org/@erc725/erc725.js/-/erc725.js-0.14.1.tgz"
@@ -1322,7 +1331,7 @@
     "web3-eth-abi" "^1.7.3"
     "web3-utils" "^1.7.3"
 
-"@erc725/smart-contracts@^3.1.0":
+"@erc725/smart-contracts@^3.1.0", "@erc725/smart-contracts@^3.1.2":
   "integrity" "sha512-PvRYl6keiPyqKDEj8hku6FbNBQd0B7YJt6+O6TFIDgEQx0rJvSR5KYf5AoTeihPLOv8zMQPCXfGYvwkma41wug=="
   "resolved" "https://registry.npmjs.org/@erc725/smart-contracts/-/smart-contracts-3.1.2.tgz"
   "version" "3.1.2"
@@ -2239,6 +2248,15 @@
     "ipfs-http-client" "52.0.3"
     "ipfs-utils" "8.1.6"
     "rxjs" "^7.3.0"
+
+"@lukso/lsp-smart-contracts@^0.6.2":
+  "integrity" "sha512-yEeYJxzpFWI//gl2SFX0fhhRp1Z7jAT/4HWYgaQcROBdjolCTMgRMmGBuSmdPaKBtbYz9qTOAx14LWcMJ5BbFQ=="
+  "resolved" "https://registry.npmjs.org/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.6.2.tgz"
+  "version" "0.6.2"
+  dependencies:
+    "@erc725/smart-contracts" "^3.1.2"
+    "@openzeppelin/contracts" "^4.6.0"
+    "solidity-bytes-utils" "0.8.0"
 
 "@lukso/lsp-smart-contracts@0.6.0":
   "integrity" "sha512-/p2nP0jJlCgTeBlp0KYDLOU2JieIh1IWs74AbFcjV6MRl6gqnXw1adzWgfK4x0t4nho++1lPqBKrLtcp7SA0lA=="
@@ -3451,7 +3469,7 @@
   "resolved" "https://registry.npmjs.org/aes-js/-/aes-js-3.0.0.tgz"
   "version" "3.0.0"
 
-"agent-base@6":
+"agent-base@^6.0.2", "agent-base@6":
   "integrity" "sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ=="
   "resolved" "https://registry.npmjs.org/agent-base/-/agent-base-6.0.2.tgz"
   "version" "6.0.2"
@@ -7922,6 +7940,14 @@
   "integrity" "sha512-9JPDgCN4B7QPkLtYAAOrEuAWvP9rWvR5offAr0/SeF046wIkglqH3VXgYYP6NcsKslH80UIVgmPqNe3j7tG2ng=="
   "resolved" "https://registry.npmjs.org/iso-url/-/iso-url-1.2.1.tgz"
   "version" "1.2.1"
+
+"isomorphic-fetch@^3.0.0":
+  "integrity" "sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA=="
+  "resolved" "https://registry.npmjs.org/isomorphic-fetch/-/isomorphic-fetch-3.0.0.tgz"
+  "version" "3.0.0"
+  dependencies:
+    "node-fetch" "^2.6.1"
+    "whatwg-fetch" "^3.4.1"
 
 "isstream@~0.1.2":
   "integrity" "sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g=="
@@ -13225,7 +13251,7 @@
   "resolved" "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-2.0.4.tgz"
   "version" "2.0.4"
 
-"whatwg-fetch@^3.6.2":
+"whatwg-fetch@^3.4.1", "whatwg-fetch@^3.6.2":
   "integrity" "sha512-bJlen0FcuU/0EMLrdbJ7zOnW6ITZLrZMIarMUVmdKtsGvZna8vxKYaexICWPfZ8qwf9fzNq+UEIZrnSaApt6RA=="
   "resolved" "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-3.6.2.tgz"
   "version" "3.6.2"

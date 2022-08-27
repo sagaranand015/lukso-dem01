@@ -20,6 +20,8 @@ import {
   AppConversionRates,
 } from '../sections/@dashboard/app';
 
+import { GetGlobalState } from "../globalState";
+
 // ----------------------------------------------------------------------
 
 // async function _initialiseStoreTokenDetails() {
@@ -88,11 +90,13 @@ import {
 export default function DashboardApp() {
   const theme = useTheme();
 
+  const state = GetGlobalState();
+
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Welcome to D-Dawg!
+          Welcome to {state.selectedProfile?.name}
         </Typography>
 
         <Grid container spacing={3}>
