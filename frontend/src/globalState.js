@@ -1,6 +1,7 @@
 let state = {
     selectedAddress: undefined,
     selectedProfile: undefined,
+    allStoreAddresses: undefined
 }
 
 export function GetGlobalState() {
@@ -17,4 +18,8 @@ export function UpdateSelectedProfileInState(selectedProfile) {
 
 export function UpdateSelectedAddressInState(addr) {
     state.selectedAddress = addr;
+}
+
+export function UpdateAllStoreAddresses(storeUPAddresses) {
+    state.allStoreAddresses = storeUPAddresses;
 }

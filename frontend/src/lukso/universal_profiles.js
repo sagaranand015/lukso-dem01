@@ -74,6 +74,17 @@ export async function GetUPContract(UPAddress) {
   return upAddrContract;
 }
 
+export async function GetUPData(UPAddress) {
+  try {
+    const config = { ipfsGateway: IPFS_GATEWAY };
+    const provider = new Web3.providers.HttpProvider(RPC_ENDPOINT);
+    const profile = new ERC725(erc725schema, UPAddress, provider, config);
+    return await profile.fetchData('LSP3Profile');
+  } catch (error) {
+      console.log('This is not an ERC725 Contract', error);
+  }
+}
+
 export async function GetConnectedWalletUPData() {
   const state = GetGlobalState();
   if(!state.selectedAddress) {
@@ -93,9 +104,6 @@ export async function GetConnectedWalletUPData() {
 }
 
 export async function BuildUploadProfileDataToIpfs(profileData) {
-
-  console.log("========= profileData before uploading to IPFS here is: ", profileData);
-
   const lspFactory = GetLSPFactory();
   const uploadResult = await lspFactory.UniversalProfile.uploadProfileData(
     profileData,
@@ -137,10 +145,6 @@ export async function EncodeDataViaErc725ForAddress(addr, ipfsUploadedUrl, ipfsU
 
 export async function UpdateUPMetadata(profileAddr, encodedDataKey, encodedDataVals) {
 
-  // const appEOA = GetAppEOA();
-
-  // const provider = new Web3.providers.HttpProvider(RPC_ENDPOINT);
-
   // Step 4.2 - Create instances of our Contracts
   const universalProfileContract = new web3.eth.Contract(
     UniversalProfile.abi,
@@ -169,8 +173,6 @@ export async function UpdateUPMetadata(profileAddr, encodedDataKey, encodedDataV
   const abiPayload = await universalProfileContract.methods[
     'setData(bytes32[],bytes[])'
   ](encodedDataKey, encodedDataVals).encodeABI();
-
-  console.log("===== the two contracts are: ", universalProfileContract, keyManagerContract, appEOA.address);
 
   // execute via the KeyManager, passing the UP payload
   const res = await keyManagerContract.methods
