@@ -14,7 +14,7 @@ import Iconify from './Iconify';
 import { FormProvider, RHFTextField, RHFCheckbox } from './hook-form';
 
 // backend imports
-import { CreateStoreUniversalProfile } from '../lukso/universal_profiles';
+import { CreateStoreUniversalProfile, ConnectStoreUPToSelectedAddress } from '../lukso/universal_profiles';
 import { GetGlobalState } from '../globalState';
 
 // ----------------------------------------------------------------------
@@ -27,14 +27,14 @@ export default function NewStoreForm() {
   const NewStoreSchema = Yup.object().shape({
     storeName: Yup.string().required('Store Name is required'),
     storeDesc: Yup.string(),
-    storeWebsite: Yup.string().url('URL must be a valid URL'),
+    storeUrl: Yup.string().url('URL must be a valid URL'),
 
   });
 
   const defaultValues = {
     storeName: '',
     storeDesc: '',
-    storeWebsite: '',
+    storeUrl: '',
   };
 
   const methods = useForm({
@@ -57,12 +57,15 @@ export default function NewStoreForm() {
       setIsSubmitting(false);
     }
     else {
-      // const storeUP = await CreateStoreUniversalProfile(state.selectedAddress, data);
-      // console.log("Store UP has been created: ", storeUP.LSP0ERC725Account.address);
-      // alert("Store UP has been created. Reloading the application");
-      // setIsSubmitting(false);
+      const storeUPContract = await CreateStoreUniversalProfile(state.selectedAddress, data);
+      console.log("Store UP has been created: ", storeUPContract.LSP0ERC725Account.address);
 
-      // navigate('/dashboard/app', { replace: true });
+      alert("Store UP has been created. Connecting now...");
+
+      const updateTxn = await ConnectStoreUPToSelectedAddress(storeUPContract.LSP0ERC725Account.address, data);
+
+      setIsSubmitting(false);
+      navigate('/dashboard/stores', { replace: true });
     }
     
   };
@@ -75,7 +78,7 @@ export default function NewStoreForm() {
 
         <RHFTextField name="storeDesc" label="Store Description" multiline rows="4" />
 
-        <RHFTextField name="storeWebsite" label="Store Website URL" />
+        <RHFTextField name="storeUrl" label="Store Website URL" />
 
       </Stack>
 

@@ -14,8 +14,10 @@
     "hardhat": "^2.10.2"
   },
   "dependencies": {
+    "@erc725/erc725.js": "^0.14.4",
     "@lukso/lsp-factory.js": "^2.3.3",
     "@lukso/lsp-smart-contracts": "^0.6.2",
+    "isomorphic-fetch": "^3.0.0",
     "web3": "^1.7.5"
   }
 }

@@ -27,6 +27,7 @@ import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
+import { GetConnectedWalletUPData } from '../lukso/universal_profiles';
 
 // ----------------------------------------------------------------------
 
@@ -82,6 +83,12 @@ export default function Stores() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const connectedUPData = GetConnectedWalletUPData();
+  connectedUPData.then(res => {
+    console.log("===========  UPDATED DATA SHOULD BE: ", res);
+  })
+  
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
