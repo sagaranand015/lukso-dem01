@@ -19,22 +19,22 @@ import { GetGlobalState } from '../globalState';
 
 // ----------------------------------------------------------------------
 
-export default function NewStoreForm() {
+export default function NewTokenForm() {
   const navigate = useNavigate();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const NewStoreSchema = Yup.object().shape({
-    storeName: Yup.string().required('Store Name is required'),
-    storeDesc: Yup.string(),
-    storeUrl: Yup.string().url('URL must be a valid URL'),
+    tokenName: Yup.string().required('Store Name is required'),
+    tokenDesc: Yup.string(),
+    tokenSymbol: Yup.string(),
 
   });
 
   const defaultValues = {
-    storeName: '',
-    storeDesc: '',
-    storeUrl: '',
+    tokenName: '',
+    tokenDesc: '',
+    tokenSymbol: '',
   };
 
   const methods = useForm({
@@ -51,18 +51,28 @@ export default function NewStoreForm() {
     setIsSubmitting(true);
 
     const state = GetGlobalState();
+    
     if(!state.selectedAddress) {
       console.log("Wallet has not been connected. Please connect wallet first!");
       alert("Wallet has not been connected. Please connect wallet first!");
       setIsSubmitting(false);
     }
+    else if(!state.selectedStore) {
+      console.log("Please select a store before proceeding to create a token");
+      alert("Please select a store before proceeding to create a token");
+      setIsSubmitting(false);
+    }
     else {
-      const storeUPContract = await CreateStoreUniversalProfile(state.selectedAddress, data);
-      console.log("Store UP has been created: ", storeUPContract.LSP0ERC725Account.address);
-      const updateTxn = await ConnectStoreUPToSelectedAddress(storeUPContract.LSP0ERC725Account.address, data).then(res => {
-        setIsSubmitting(false);
-        alert("Store Creation Finished. Please reload the application to see store details");
-      });
+      console.log("token to be created here...");
+      setIsSubmitting(false);
+      // const storeUPContract = await CreateStoreUniversalProfile(state.selectedAddress, data);
+      // console.log("Store UP has been created: ", storeUPContract.LSP0ERC725Account.address);
+
+      // alert("Store UP has been created. Connecting now...");
+
+      // const updateTxn = await ConnectStoreUPToSelectedAddress(storeUPContract.LSP0ERC725Account.address, data);
+
+      // setIsSubmitting(false);
       // navigate('/dashboard/stores', { replace: true });
     }
     
@@ -72,16 +82,16 @@ export default function NewStoreForm() {
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
 
-        <RHFTextField name="storeName" label="Store Name" />
+        <RHFTextField name="tokenName" label="Token Name" />
 
-        <RHFTextField name="storeDesc" label="Store Description" multiline rows="4" />
+        <RHFTextField name="tokenSymbol" label="Token Symbol" />
 
-        <RHFTextField name="storeUrl" label="Store Website URL" />
+        <RHFTextField name="tokenDesc" label="Token Description" />
 
       </Stack>
 
       <LoadingButton fullWidth size="large" type="submit" loading={isSubmitting} variant="contained"  sx={{ my: 4 }}>
-        Create Store
+        Create Token
       </LoadingButton>
     </FormProvider>
   );

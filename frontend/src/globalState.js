@@ -1,8 +1,11 @@
 let state = {
     selectedAddress: undefined,
     selectedProfile: undefined,
-    allStoreAddresses: undefined
+    allStoreAddresses: undefined,
+    allStores: [],
+    selectedStore: undefined,
 }
+
 
 export function GetGlobalState() {
     return state;
@@ -22,4 +25,12 @@ export function UpdateSelectedAddressInState(addr) {
 
 export function UpdateAllStoreAddresses(storeUPAddresses) {
     state.allStoreAddresses = storeUPAddresses;
+}
+
+export function AddStoreDetailsToState(store) {
+    state.allStores.push(store);
+}
+
+export function UpdateAllStoreDetails(allStores) {
+    state.allStores = allStores;
 }

@@ -12,6 +12,8 @@ import Register from './pages/Register';
 import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 import NewStore from './pages/NewStore';
+import Tokens from './pages/Tokens';
+import NewToken from './pages/NewToken';
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +27,8 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'stores', element: <Stores /> },
         { path: 'newstore', element: <NewStore /> },
-        { path: 'products', element: <Products /> },
+        { path: 'newtoken', element: <NewToken /> },
+        { path: 'tokens', element: <Tokens /> },
         { path: 'blog', element: <Blog /> },
       ],
     },

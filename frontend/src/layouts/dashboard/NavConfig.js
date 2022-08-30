@@ -18,7 +18,7 @@ const navConfig = [
   },
   {
     title: 'Subscriptions',
-    path: '/dashboard/products',
+    path: '/dashboard/tokens',
     icon: getIcon('eva:shopping-bag-fill'),
   },
   // {

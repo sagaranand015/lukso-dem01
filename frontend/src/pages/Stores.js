@@ -31,7 +31,8 @@ import USERLIST from '../_mock/user';
 import { GetConnectedWalletUPData, GetUPData } from '../lukso/universal_profiles';
 
 import PRODUCTS from '../_mock/products';
-import { GetGlobalState, UpdateAllStoreAddresses } from '../globalState';
+import { AddStoreDetailsToState, GetGlobalState, UpdateAllStoreAddresses, UpdateAllStoreDetails } from '../globalState';
+import { Loading } from '../components/Loading';
 
 
 export default function Stores() {
@@ -39,15 +40,19 @@ export default function Stores() {
   const state = GetGlobalState();
   const allStoreAddr = [];
   const allStores = [];
-  // const allStoreGrid = [];
-  const [allStoreGrid, setAllStoreGrid] = useState([]);
-  const [gridOk, setGridOk] = useState(false);
+  const [allStoresGrid, setAllStoresGrid] = useState([]);
+  const [ showLoading, setShowLoading] = useState(false);
 
-  // useEffect(() => {
-  //   while(gridOk) {
-      
-  //   }
-  // }, []);
+  useEffect(() => {
+    GetAllStoreAddresses();
+    PopulateAllStoresGrid();
+
+    const timer = setTimeout(() => {
+      setShowLoading(true);
+      setAllStoresGrid(allStores);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   async function PopulateAllStoresGrid() {
     allStoreAddr.forEach(storeAddr => {
@@ -60,7 +65,6 @@ export default function Stores() {
               'name': res.value.LSP3Profile.name,
               'cover': '/static/mock-images/stores/store_placeholder.jpg',
             });
-            setGridOk(true);
           }
         });
       }
@@ -72,12 +76,10 @@ export default function Stores() {
   }
 
   async function GetAllStoreAddresses() {
-
     if(!state.selectedAddress) {
       alert("Please connect wallet to see stores here...");
       return;
     }
-
     const connectedProfileData = state.selectedProfile;
     console.log("selected profile data is: ", connectedProfileData.links);
     connectedProfileData.links.forEach(addr => {
@@ -85,7 +87,7 @@ export default function Stores() {
     });
 
     UpdateAllStoreAddresses(allStoreAddr);
-    PopulateAllStoresGrid();
+    // PopulateAllStoresGrid();
   }
 
   const [openFilter, setOpenFilter] = useState(false);
@@ -98,7 +100,11 @@ export default function Stores() {
     setOpenFilter(false);
   };
 
-  GetAllStoreAddresses();
+  if(!showLoading) {
+    return (
+      <Loading />
+    );
+  }
 
   return (
     <Page title="Stores">
@@ -113,7 +119,7 @@ export default function Stores() {
             </Button>
           </Stack>
 
-          <ProductList products={allStoreGrid} />
+          <ProductList products={allStoresGrid} />
           {/* <ProductCartWidget /> */}
         </Container>
       </Page>

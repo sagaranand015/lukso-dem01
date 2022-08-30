@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { faker } from '@faker-js/faker';
 // @mui
@@ -21,77 +22,29 @@ import {
 } from '../sections/@dashboard/app';
 
 import { GetGlobalState } from "../globalState";
+import { Loading } from "../components/Loading";
 
 // ----------------------------------------------------------------------
 
-// async function _initialiseStoreTokenDetails() {
-//   const storeContract = await GetStoreContract();
-//   const [name, symbol, storeTokenBalance] = await GetStoreTokenDetails(this.state.selectedAddress);
-//   this.setState({ storeContact: storeContract,  storeTokenData: { name, symbol}, storeTokenBalance: storeTokenBalance.toNumber()});
-// }
-
-// async function _initialiseStoresubscriptionTokenDetails() {
-//   const subContract = await GetStoreSubscriptionContract();
-//   const [name, symbol, subTokenBalance] = await GetStoreSubscriptionTokenDetails(this.state.selectedAddress);
-//   this.setState({ subscriptionContract: subContract,  subscriptionTokenData: { name, symbol}, subscriptionTokenBalance: subTokenBalance.toNumber()});
-// }
-
-// async function _refreshAllTokenBalances() {
-//   await this._refreshStoreTokenBalance();
-//   await this._refreshStoresubscriptionTokenBalance();
-// }
-
-// async function _refreshStoreTokenBalance() {
-//   if(!this.state.selectedAddress) {
-//     console.log("No Address, connect wallet please...");
-//     return;
-//   }
-//   else if(!this.state.storeContact || !this.state.storeTokenData) {
-//     console.log("No Store Contract or token connected, please try again...");
-//     return;
-//   }
-//   const storeTokenBalance = await this.state.storeContact.balanceOf(this.state.selectedAddress);
-//   this.setState({
-//     storeTokenBalance: storeTokenBalance.toNumber()
-//   });
-//   return this.state.storeTokenBalance;
-// }
-
-// async function _refreshStoresubscriptionTokenBalance() {
-//   if(!this.state.selectedAddress) {
-//     console.log("No Address, connect wallet please...");
-//     return;
-//   }
-//   else if(!this.state.subscriptionContract || !this.state.subscriptionTokenData) {
-//     console.log("No Store subscription Contract or token connected, please try again...");
-//     return;
-//   }
-//   const subTokenBalance = await this.state.subscriptionContract.balanceOf(this.state.selectedAddress);
-//   this.setState({
-//     subscriptionTokenBalance: subTokenBalance.toNumber()
-//   });
-//   return this.state.subscriptionTokenBalance;
-// }
-
-// let state = {
-//   // keeping a handle to the contract itself
-//   storeContact: undefined,
-//   // The info of the token (i.e. It's Name and symbol)
-//   storeTokenData: undefined,
-//   // The user's address and balance
-//   selectedAddress: undefined,
-//   storeTokenBalance: undefined,
-//   // The ID about transactions being sent, and any possible error with them
-//   txBeingSent: undefined,
-//   transactionError: undefined,
-//   networkError: undefined,
-// }
-
 export default function DashboardApp() {
+
   const theme = useTheme();
 
   const state = GetGlobalState();
 
+  const [showDashboard, setShowDashboard] = useState(false);
+
+  useEffect(() => {
+    console.log("USe Effect Ran!", state.selectedProfile);
+    if(state.selectedProfile) {
+      setShowDashboard(true);
+    }
+  }, [showDashboard]);
+
+  if(!showDashboard) {
+    return (<Loading />);
+  }
+    
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
