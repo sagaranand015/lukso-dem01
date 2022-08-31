@@ -1,7 +1,7 @@
 import React from "react";
 import Iconify from "./Iconify";
 
-export function Loading() {
+export function NoWalletConnectedMessage() {
   return (
     <div
       style={{
@@ -20,7 +20,7 @@ export function Loading() {
           zIndex: 3,
           top: "50%",
           left: "50%",
-          width: "100px",
+          width: "200px",
           height: "50px",
           marginLeft: "-50px",
           marginTop: " -25px",
@@ -28,8 +28,8 @@ export function Loading() {
         }}
       >
         <div className="spinner-border" role="status">
-        <Iconify icon={'line-md:loading-twotone-loop'} /> <br />
-          <span className="sr-only"><b>Loading Content... Please wait</b></span>
+          <Iconify icon={'mdi:airplane-alert'} width="24" height="24" /> <br />
+          <span className="sr-only"><b>Please connect your Wallet to get started</b></span>
         </div>
       </div>
     </div>

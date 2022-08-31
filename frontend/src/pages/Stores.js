@@ -31,7 +31,7 @@ import USERLIST from '../_mock/user';
 import { GetConnectedWalletUPData, GetUPData } from '../lukso/universal_profiles';
 
 import PRODUCTS from '../_mock/products';
-import { AddStoreDetailsToState, GetGlobalState, UpdateAllStoreAddresses, UpdateAllStoreDetails } from '../globalState';
+import { GetGlobalState, UpdateAllStoreAddresses, UpdateAllStoreDetails } from '../globalState';
 import { Loading } from '../components/Loading';
 
 
@@ -50,6 +50,7 @@ export default function Stores() {
     const timer = setTimeout(() => {
       setShowLoading(true);
       setAllStoresGrid(allStores);
+      UpdateAllStoreDetails(allStores);
     }, 3000);
     return () => clearTimeout(timer);
   }, []);
@@ -59,11 +60,12 @@ export default function Stores() {
       try {
         const reqs = GetUPData(storeAddr).then(res => {
           if(res) {
-            console.log("======== resp is: ", res.value.LSP3Profile.name);
+            console.log("======== resp is: ", res.value.LSP3Profile);
             allStores.push({
               'id': storeAddr,
               'name': res.value.LSP3Profile.name,
-              'cover': '/static/mock-images/stores/store_placeholder.jpg',
+              'cover': '/static/mock-images/stores/store_placeholder.png',
+              'urlLink': res.value.LSP3Profile.links[0].url,
             });
           }
         });
@@ -87,7 +89,6 @@ export default function Stores() {
     });
 
     UpdateAllStoreAddresses(allStoreAddr);
-    // PopulateAllStoresGrid();
   }
 
   const [openFilter, setOpenFilter] = useState(false);

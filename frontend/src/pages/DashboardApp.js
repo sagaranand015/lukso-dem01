@@ -23,6 +23,7 @@ import {
 
 import { GetGlobalState } from "../globalState";
 import { Loading } from "../components/Loading";
+import {NoWalletConnectedMessage} from '../components/NoWalletConnectedMessage';
 
 // ----------------------------------------------------------------------
 
@@ -35,13 +36,19 @@ export default function DashboardApp() {
   const [showDashboard, setShowDashboard] = useState(false);
 
   useEffect(() => {
-    console.log("USe Effect Ran!", state.selectedProfile);
-    if(state.selectedProfile) {
-      setShowDashboard(true);
-    }
-  }, [showDashboard]);
+    const timer = setInterval(() => {
+      if(state.selectedAddress && state.selectedProfile) {
+        setShowDashboard(true);
+        clearInterval(timer);
+      }
+    }, 1000);
+  }, []);
 
-  if(!showDashboard) {
+  if(!state.selectedAddress) {
+    return (<NoWalletConnectedMessage />);
+  }
+
+  if(!showDashboard && state.selectedAddress) {
     return (<Loading />);
   }
     

@@ -6,6 +6,8 @@ import UniversalProfile from '@lukso/lsp-smart-contracts/artifacts/UniversalProf
 import KeyManager from '@lukso/lsp-smart-contracts/artifacts/LSP6KeyManager.json';
 import erc725schema from '@erc725/erc725.js/schemas/LSP3UniversalProfileMetadata.json';
 
+import LSP8Mintable from '@lukso/lsp-smart-contracts/artifacts/LSP8Mintable.json';
+
 import { GetGlobalState } from '../globalState';
 import { RPC_ENDPOINT, IPFS_GATEWAY, PRIVATE_KEY, CHAIN_ID } from './constants';
 
@@ -214,4 +216,95 @@ export async function ConnectStoreUPToSelectedAddress(storeUPAddr, storeMetadata
 
     });
   });
+}
+
+// export async function DeployStoreToken(creatingStoreAddr, tokenData) {
+//   const factory = GetLSPFactory();
+//   const contracts = await factory.LSP7DigitalAsset.deploy(
+//     {
+//       name: tokenData.name,
+//       symbol: tokenData.symbol,
+//       controllerAddress: creatingStoreAddr, // the "issuer" of the asset, that is allowed to change meta data
+//       isNFT: true, // Token decimals set to 18
+//     },
+//     {
+//       onDeployEvents: {
+//         next: (deploymentEvent) => {
+//           console.log(deploymentEvent);
+
+//           if (deploymentEvent.status === 'COMPLETE')  {
+//             console.log("===== done with deployment");
+//           }
+//         },
+//         error: (error) => {
+//           console.log("===== error with deployment", error);
+//         },
+//         complete: async (contracts) => {
+//           console.log('Deployment Complete');
+//           console.log(contracts.LSP7DigitalAsset);
+//         },
+//       },
+//     }
+//   );
+//   return contracts;
+// }
+
+export async function DeployStoreToken(creatingStoreAddr, tokenData) {
+  const factory = GetLSPFactory();
+  console.log("creating token now...")
+  const contracts = await factory.LSP8IdentifiableDigitalAsset.deploy(
+    {
+      name: tokenData.name,
+      symbol: tokenData.symbol,
+      controllerAddress: creatingStoreAddr, // the "issuer" of the asset, that is allowed to change meta data
+      isNFT: true, // Token decimals set to 18
+    });
+  return contracts;
+}
+
+export async function MintStoreToken(creatingStoreAddr) {
+  const appEOA = GetAppEOA();
+  const lsp8IdentifiableDigitalAssetContract = new web3.eth.Contract(LSP8Mintable.abi, appEOA.address, {gas: 5_000_000,
+    gasPrice: '1000000000'});
+  
+    console.log("====== token contract is: ", lsp8IdentifiableDigitalAssetContract);
+  
+    web3.eth.accounts.wallet.add(PRIVATE_KEY);
+  
+    const account = appEOA.address;
+    const to = creatingStoreAddr;
+    const force = true; // When set to TRUE, to may be any address; when set to FALSE to must be a contract that supports LSP1 UniversalReceiver and not revert.
+    const data = '0x';
+    const paddedTokenId = web3.utils.padRight(web3.utils.stringToHex(1), 64);
+  
+    const mintResp = await lsp8IdentifiableDigitalAssetContract.methods.mint(to, paddedTokenId, force, data).send({ from: account });
+    return mintResp;
+    // try {
+    //   await lsp8IdentifiableDigitalAssetContract.methods.mint(to, paddedTokenId, force, data).send({ from: account }).then(resp => {
+    //     console.log("=========== response os: ", resp);
+    //   });
+    //   // mintEvents.value.push({ stepName: '✅ Mint the NFT on the LSP8 smart contract', functionName: 'mint', receipt });
+    // } catch (err) {
+    //   console.log("=========== error is: ", err);
+      
+    // }
+
+}
+
+export async function GetStoreAssets(storeAddr) {
+  // Fetch the LSP5 data of the Universal Profile to get its owned assets
+  console.log("====== starting getting assets...");
+  const config = { ipfsGateway: IPFS_GATEWAY };
+  const provider = new Web3.providers.HttpProvider(RPC_ENDPOINT);
+
+  const profile = new ERC725(
+    erc725schema,
+    storeAddr,
+    provider,
+    config,
+  );
+  const result = await profile.fetchData();
+  console.log("======= result is: ", result);
+  // const ownedAssets = result.value;
+  // console.log(ownedAssets);
 }

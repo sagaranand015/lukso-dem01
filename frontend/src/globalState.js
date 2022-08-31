@@ -3,7 +3,8 @@ let state = {
     selectedProfile: undefined,
     allStoreAddresses: undefined,
     allStores: [],
-    selectedStore: undefined,
+    selectedStore: {name: '', id: ''},
+    storeTokens: []
 }
 
 
@@ -27,10 +28,17 @@ export function UpdateAllStoreAddresses(storeUPAddresses) {
     state.allStoreAddresses = storeUPAddresses;
 }
 
-export function AddStoreDetailsToState(store) {
-    state.allStores.push(store);
-}
-
 export function UpdateAllStoreDetails(allStores) {
     state.allStores = allStores;
+}
+
+export function UpdateSelectedStore(store) {
+    state.selectedStore = store;
+}
+
+export function AddToStoreTokens(storeAddr, tokenAddr) {
+    state.storeTokens.push({
+        'storeAddr': storeAddr,
+        'tokenAddr': tokenAddr,
+    });
 }

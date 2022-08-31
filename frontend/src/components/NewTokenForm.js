@@ -7,34 +7,34 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 // @mui
-import { Link, Stack, IconButton, InputAdornment } from '@mui/material';
+import { Link, Stack, IconButton, InputAdornment, InputLabel, Select, MenuItem, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from './Iconify';
 import { FormProvider, RHFTextField, RHFCheckbox } from './hook-form';
 
 // backend imports
-import { CreateStoreUniversalProfile, ConnectStoreUPToSelectedAddress } from '../lukso/universal_profiles';
-import { GetGlobalState } from '../globalState';
+import { CreateStoreUniversalProfile, ConnectStoreUPToSelectedAddress, DeployStoreToken, GetStoreAssets, MintStoreToken } from '../lukso/universal_profiles';
+import { AddToStoreTokens, GetGlobalState, UpdateSelectedStore } from '../globalState';
 
 // ----------------------------------------------------------------------
 
 export default function NewTokenForm() {
   const navigate = useNavigate();
+  const state = GetGlobalState();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const NewStoreSchema = Yup.object().shape({
-    tokenName: Yup.string().required('Store Name is required'),
-    tokenDesc: Yup.string(),
-    tokenSymbol: Yup.string(),
+  const [selectedStore, setSelectedStore] = useState(state.allStores[0]);
 
+  const [tokenDetails, setTokenDetails] = useState('');
+
+  const [mintedTokenDetails, setMintedTokenDetails] = useState('');
+
+  const NewStoreSchema = Yup.object().shape({
   });
 
   const defaultValues = {
-    tokenName: '',
-    tokenDesc: '',
-    tokenSymbol: '',
   };
 
   const methods = useForm({
@@ -46,11 +46,10 @@ export default function NewTokenForm() {
     handleSubmit,
   } = methods;
 
+
   const onSubmit = async (data) => {
 
     setIsSubmitting(true);
-
-    const state = GetGlobalState();
     
     if(!state.selectedAddress) {
       console.log("Wallet has not been connected. Please connect wallet first!");
@@ -63,30 +62,73 @@ export default function NewTokenForm() {
       setIsSubmitting(false);
     }
     else {
-      console.log("token to be created here...");
-      setIsSubmitting(false);
-      // const storeUPContract = await CreateStoreUniversalProfile(state.selectedAddress, data);
-      // console.log("Store UP has been created: ", storeUPContract.LSP0ERC725Account.address);
+      console.log("token to be created here for store: ", selectedStore.name, selectedStore.id);
 
-      // alert("Store UP has been created. Connecting now...");
+      const tokenData = {
+        'name': '{$selectedStore.name} Subscription',
+        'symbol': 'SKN',
+      }
 
-      // const updateTxn = await ConnectStoreUPToSelectedAddress(storeUPContract.LSP0ERC725Account.address, data);
+      try {
+        DeployStoreToken(selectedStore.id, tokenData).then(resp => {
+          console.log("===== response from call is: ", resp);
+          const deployedTokenAddr = resp.LSP8IdentifiableDigitalAsset.address;
+          setTokenDetails(deployedTokenAddr);
+          AddToStoreTokens(selectedStore.id, resp.LSP8IdentifiableDigitalAsset.address);
+  
+          MintStoreToken(selectedStore.id).then(mintResp => {
+            console.log("====== minting token response: ", mintResp);
+            setMintedTokenDetails(mintResp.transactionHash);
+            alert("Your Token has been deployed and minted. Please check the data displayed!");
+            setIsSubmitting(false);
+          }); 
+        });
+      } catch(error) {
+        console.log("Error during deploying and minting token..", error);
+        alert("Error during deploying and minting token. Please check console for details");
+            setIsSubmitting(false);
+      }
 
-      // setIsSubmitting(false);
-      // navigate('/dashboard/stores', { replace: true });
+      // GetStoreAssets('0x431507Dfcae689e28922dE3FAeDDCB6c7478d801');
+
     }
     
+  };
+
+  const onChange = (event, child) => {
+    console.log(event.target.value);
+    state.allStores.forEach(s => {
+      if(String(s.name) === String(event.target.value)) {
+        setSelectedStore(s);
+        UpdateSelectedStore(s);
+      }
+    });
   };
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
 
-        <RHFTextField name="tokenName" label="Token Name" />
+      <Select
+        value={selectedStore.name}
+        onChange={onChange}
+        inputProps={{
+          name: "selectedStore",
+          id: "selected-store"
+        }}
+      >
+        {state.allStores.map((value, index) => {
+          return <MenuItem key={value.id} data-id={value.id} value={value.name}>{value.name}</MenuItem>;
+        })}
+      </Select>
 
-        <RHFTextField name="tokenSymbol" label="Token Symbol" />
+        <Typography variant="h5" gutterBottom>
+          Deployed Token Address: {tokenDetails}
+        </Typography>
 
-        <RHFTextField name="tokenDesc" label="Token Description" />
+        <Typography variant="h5" gutterBottom>
+          Minted Token Txn: {mintedTokenDetails}
+        </Typography>
 
       </Stack>
 

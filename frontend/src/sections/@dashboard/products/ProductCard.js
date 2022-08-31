@@ -26,7 +26,7 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
+  const { id, name, cover, price, colors, status, priceSale, urlLink } = product;
 
   return (
     <Card>
@@ -50,11 +50,11 @@ export default function ShopProductCard({ product }) {
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link to="#" color="inherit" underline="hover" component={RouterLink}>
+        <a href={urlLink} target="_blank" rel="noopener noreferrer" color="inherit" underline="hover">
           <Typography variant="subtitle2" noWrap>
             {name}
           </Typography>
-        </Link>
+        </a>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           {/* <ColorPreview colors={colors} /> */}
@@ -64,13 +64,14 @@ export default function ShopProductCard({ product }) {
               variant="body1"
               sx={{
                 color: 'text.disabled',
-                textDecoration: 'line-through',
+                textWrap: 'wrap',
+                // textDecoration: 'line-through',
               }}
             >
-              {priceSale && fCurrency(priceSale)}
+              {id}
             </Typography>
-            &nbsp;
-            {fCurrency(price)}
+            {/* &nbsp;
+            {fCurrency(price)} */}
           </Typography>
         </Stack>
       </Stack>
