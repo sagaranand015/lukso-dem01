@@ -65,12 +65,12 @@ export default function DashboardApp() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={4}>
-            <AppActionWidget icon={'ant-design:usb-filled'} btnText="Manage your Subscriptions" path="/dashboard/products" />
+            <AppActionWidget icon={'ant-design:usb-filled'} btnText="Manage your Subscriptions" path="/dashboard/tokens" />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={4}>
+          {/* <Grid item xs={12} sm={6} md={4}>
             <AppActionWidget icon={'ant-design:sound-filled'} btnText="Give Feedback" path="/dashboard/user" />
-          </Grid>
+          </Grid> */}
 
         </Grid>
       </Container>
